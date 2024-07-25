@@ -27,6 +27,9 @@ function drawText(ctx, text) {
 }
 
 function nodeDrawProfiler(node) {
+  if (!node || typeof node.onDrawForeground !== 'function') {
+    return;
+  }
   if (node.onDrawForeground._overwrited) {
     return;
   }

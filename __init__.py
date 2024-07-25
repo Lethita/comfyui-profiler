@@ -1,10 +1,8 @@
 import os
 import time
-import asyncio
 from typing import Any
 
 import execution
-import asyncio
 
 import server
 
@@ -22,9 +20,9 @@ exist_PromptExecutor_execute = execution.PromptExecutor.execute
 profiler_data = {}
 profiler_outputs = []
 
-async def send_message(data) -> None:
+def send_message(data) -> None:
     s = server.PromptServer.instance
-    await s.send_json('profiler', data)
+    s.send_sync('profiler', data)
 
 def get_input_unique_ids(inputs) -> list:
     ret = []
@@ -70,11 +68,11 @@ def new_recursive_execute(server, prompt, outputs, current_item, extra_data, exe
     profiler_data['nodes'][current_item] = end_time - start_time - this_time_nodes_time
     total_inputs_time, _ = get_total_inputs_time(current_item, prompt, [])
 
-    asyncio.run(send_message({
+    send_message({
         'node': current_item,
         'current_time': profiler_data['nodes'][current_item],
         'total_inputs_time': total_inputs_time
-    }))
+    })
 
     inputs_str = ''
     if len(input_unique_ids) > 0:
