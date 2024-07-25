@@ -27,19 +27,12 @@ function drawText(ctx, text) {
 }
 
 function nodeDrawProfiler(node) {
-  if (!node || typeof node.onDrawForeground !== 'function') {
-    return;
-  }
-  if (node.onDrawForeground._overwrited) {
-    return;
-  }
   const orig = node.onDrawForeground;
   node.onDrawForeground = function(ctx) {
     const ret = orig?.apply(ctx, arguments);
     drawText(ctx, node.profilingTime || '');
     return ret;
   };
-  node.onDrawForeground._overwrited = true
 }
 
 app.registerExtension({
